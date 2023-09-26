@@ -38,7 +38,7 @@ auto Cache::CacheNode::GetTimeStamp() const noexcept -> uint64_t {
   return last_access_;
 }
 
-Cache::Cache(size_t capacity = DEFAULT_CACHE_CAPACITY) noexcept
+Cache::Cache(size_t capacity) noexcept
     : capacity_(capacity), header_(std::make_unique<CacheNode>()),
       tailer_(std::make_unique<CacheNode>()) {
   header_->next_ = tailer_.get();
