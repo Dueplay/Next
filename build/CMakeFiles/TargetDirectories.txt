@@ -1,0 +1,6 @@
+/home/book/study/Next/build/CMakeFiles/turtle_core.dir
+/home/book/study/Next/build/CMakeFiles/turtle_log.dir
+/home/book/study/Next/build/CMakeFiles/echo_server.dir
+/home/book/study/Next/build/CMakeFiles/echo_client.dir
+/home/book/study/Next/build/CMakeFiles/edit_cache.dir
+/home/book/study/Next/build/CMakeFiles/rebuild_cache.dir

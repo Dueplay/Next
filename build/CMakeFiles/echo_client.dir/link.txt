@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/echo_client.dir/demo/echo/echo_client.cpp.o -o /home/book/study/Next/bin/echo_client  /home/book/study/Next/lib/libturtle_core.a /home/book/study/Next/lib/libturtle_log.a -pthread 
