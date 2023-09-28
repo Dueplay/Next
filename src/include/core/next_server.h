@@ -28,7 +28,7 @@ public:
       : pool_(std::make_unique<ThreadPool>(concurrency)),
         listener_(std::make_unique<Looper>()) {
     for (size_t i = 0; i < pool_->GetSize(); i++) {
-      reactors_.push_back(std::make_unique<Looper>(3000));
+      reactors_.push_back(std::make_unique<Looper>(TIMER_EXPIRATION));
     }
     for (auto &reactor : reactors_) {
       pool_->SubmitTask([capture0 = reactor.get()]() { capture0->Loop(); });

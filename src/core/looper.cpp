@@ -22,7 +22,7 @@ void Looper::Loop() {
     Connection *timer_conn = nullptr;
 
     for (auto &conn : ready_connections) {
-      if (conn = timer_.GetTimerConnection()) {
+      if (conn == timer_.GetTimerConnection()) {
         timer_conn = conn;
         continue;
       }

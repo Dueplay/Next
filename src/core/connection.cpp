@@ -91,7 +91,7 @@ auto Connection::Recv() -> std::pair<ssize_t, bool> {
 void Connection::Send() {
   ssize_t curr_write = 0;
   ssize_t write;
-  const size_t to_write = GetWriteBufferSize();
+  const ssize_t to_write = GetWriteBufferSize();
   const unsigned char *buf = write_buffer_->Data();
   while (curr_write < to_write) {
     write = send(GetFd(), buf + curr_write, to_write - curr_write, 0);
@@ -108,7 +108,7 @@ void Connection::Send() {
   }
   ClearWriteBuffer();
 }
-void Connection::ClearReadBuffer() noexcept { read_buffer_->Clear(); };
+void Connection::ClearReadBuffer() noexcept { read_buffer_->Clear(); }
 void Connection::ClearWriteBuffer() noexcept { write_buffer_->Clear(); }
 
 void Connection::SetLooper(Looper *looper) noexcept { owner_looper_ = looper; }
