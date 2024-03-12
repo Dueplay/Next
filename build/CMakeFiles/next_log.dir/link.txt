@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../lib/libnext_log.a CMakeFiles/next_log.dir/src/log/logger.cpp.o
+/usr/bin/ranlib ../lib/libnext_log.a

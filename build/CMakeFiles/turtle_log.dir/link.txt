@@ -1,2 +1,2 @@
-/usr/bin/ar qc /home/book/study/Next/lib/libturtle_log.a CMakeFiles/turtle_log.dir/src/log/logger.cpp.o
-/usr/bin/ranlib /home/book/study/Next/lib/libturtle_log.a
+/usr/bin/ar qc ../lib/libturtle_log.a CMakeFiles/turtle_log.dir/src/log/logger.cpp.o
+/usr/bin/ranlib ../lib/libturtle_log.a

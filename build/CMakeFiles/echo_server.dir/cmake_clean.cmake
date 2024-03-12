@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/book/study/Next/bin/echo_server"
-  "/home/book/study/Next/bin/echo_server.pdb"
+  "../bin/echo_server"
+  "../bin/echo_server.pdb"
   "CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.o"
   "CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.o.d"
 )

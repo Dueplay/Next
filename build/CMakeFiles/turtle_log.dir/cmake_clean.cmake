@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/book/study/Next/lib/libturtle_log.a"
-  "/home/book/study/Next/lib/libturtle_log.pdb"
+  "../lib/libturtle_log.a"
+  "../lib/libturtle_log.pdb"
   "CMakeFiles/turtle_log.dir/src/log/logger.cpp.o"
   "CMakeFiles/turtle_log.dir/src/log/logger.cpp.o.d"
 )

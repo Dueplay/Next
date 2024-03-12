@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../lib/libnext_core.a CMakeFiles/next_core.dir/src/core/acceptor.cpp.o CMakeFiles/next_core.dir/src/core/buffer.cpp.o CMakeFiles/next_core.dir/src/core/cache.cpp.o CMakeFiles/next_core.dir/src/core/connection.cpp.o CMakeFiles/next_core.dir/src/core/looper.cpp.o CMakeFiles/next_core.dir/src/core/net_addr.cpp.o CMakeFiles/next_core.dir/src/core/poller.cpp.o CMakeFiles/next_core.dir/src/core/socket.cpp.o CMakeFiles/next_core.dir/src/core/thread_pool.cpp.o CMakeFiles/next_core.dir/src/core/timer.cpp.o
+/usr/bin/ranlib ../lib/libnext_core.a

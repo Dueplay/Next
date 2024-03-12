@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.o -o /home/book/study/Next/bin/echo_server  /home/book/study/Next/lib/libturtle_core.a /home/book/study/Next/lib/libturtle_log.a -pthread 
+/usr/bin/c++ CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.o -o ../bin/echo_server  ../lib/libnext_core.a ../lib/libnext_log.a 

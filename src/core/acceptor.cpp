@@ -21,8 +21,9 @@ Acceptor::Acceptor(Looper *listener, std::vector<Looper *> reactors,
   SetCustomAcceptCallback([](Connection *) {});
   SetCustomHandleCallback([](Connection *) {});
 }
+
 /**
- * accept a connect,and create Connection for client
+ * accept a connect,and create Connection for client,then add to epoll
  */
 void Acceptor::BaseAcceptCallback(Connection *server_conn) {
   NetAddress client_address;
@@ -42,6 +43,7 @@ void Acceptor::BaseAcceptCallback(Connection *server_conn) {
   client_conn->SetLooper(reactors_[idx]);
   reactors_[idx]->AddConnection(std::move(client_conn));
 }
+
 void Acceptor::BaseHandleCallback(Connection *client_conn) {
   int fd = client_conn->GetFd();
   if (client_conn->GetLooper()) {
@@ -50,12 +52,13 @@ void Acceptor::BaseHandleCallback(Connection *client_conn) {
 }
 void Acceptor::SetCustomAcceptCallback(
     std::function<void(Connection *)> custom_accept_callback) {
-  custom_accept_callback = std::move(custom_accept_callback);
+  custom_accept_callback_ = std::move(custom_accept_callback);
   acceptor_conn_->SetCallback([this](auto &&PH1) {
     BaseAcceptCallback(std::forward<decltype(PH1)>(PH1));
     custom_accept_callback_(std::forward<decltype(PH1)>(PH1));
   });
 }
+
 void Acceptor::SetCustomHandleCallback(
     std::function<void(Connection *)> custom_handle_callback) {
   custom_handle_callback_ =
@@ -64,14 +67,17 @@ void Acceptor::SetCustomHandleCallback(
         callback(std::forward<decltype(PH1)>(PH1));
       };
 }
+
 auto Acceptor::GetCustomAcceptCallback() const noexcept
     -> std::function<void(Connection *)> {
   return custom_accept_callback_;
 }
+
 auto Acceptor::GetCustomHandleCallback() const noexcept
     -> std::function<void(Connection *)> {
   return custom_handle_callback_;
 }
+
 auto Acceptor::GetAcceptorConnection() noexcept -> Connection * {
   return acceptor_conn_.get();
 }

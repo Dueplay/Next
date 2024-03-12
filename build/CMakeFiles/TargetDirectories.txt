@@ -1,6 +1,8 @@
-/home/book/study/Next/build/CMakeFiles/turtle_core.dir
-/home/book/study/Next/build/CMakeFiles/turtle_log.dir
-/home/book/study/Next/build/CMakeFiles/echo_server.dir
-/home/book/study/Next/build/CMakeFiles/echo_client.dir
-/home/book/study/Next/build/CMakeFiles/edit_cache.dir
-/home/book/study/Next/build/CMakeFiles/rebuild_cache.dir
+/home/gxj/Next/build/CMakeFiles/next_core.dir
+/home/gxj/Next/build/CMakeFiles/next_http.dir
+/home/gxj/Next/build/CMakeFiles/next_log.dir
+/home/gxj/Next/build/CMakeFiles/echo_server.dir
+/home/gxj/Next/build/CMakeFiles/echo_client.dir
+/home/gxj/Next/build/CMakeFiles/http_server.dir
+/home/gxj/Next/build/CMakeFiles/edit_cache.dir
+/home/gxj/Next/build/CMakeFiles/rebuild_cache.dir

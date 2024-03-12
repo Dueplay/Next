@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/book/study/Next/lib/libturtle_core.a"
-  "/home/book/study/Next/lib/libturtle_core.pdb"
+  "../lib/libturtle_core.a"
+  "../lib/libturtle_core.pdb"
   "CMakeFiles/turtle_core.dir/src/core/acceptor.cpp.o"
   "CMakeFiles/turtle_core.dir/src/core/acceptor.cpp.o.d"
   "CMakeFiles/turtle_core.dir/src/core/buffer.cpp.o"

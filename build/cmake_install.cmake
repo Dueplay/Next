@@ -1,4 +1,4 @@
-# Install script for directory: /home/book/study/Next
+# Install script for directory: /home/gxj/Next
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/book/study/Next/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/gxj/Next/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

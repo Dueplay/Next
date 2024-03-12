@@ -1,3 +1,3 @@
 file(REMOVE_RECURSE
-  "/home/book/study/Next/lib/libturtle_log.a"
+  "../lib/libturtle_log.a"
 )

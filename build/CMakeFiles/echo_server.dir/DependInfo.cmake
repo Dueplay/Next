@@ -8,11 +8,13 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/book/study/Next/demo/echo/echo_server.cpp" "CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.o" "gcc" "CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.o.d"
+  "/home/gxj/Next/demo/echo/echo_server.cpp" "CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.o" "gcc" "CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.o.d"
   )
 
-# Targets to which this target links which contain Fortran sources.
-set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/gxj/Next/build/CMakeFiles/next_core.dir/DependInfo.cmake"
+  "/home/gxj/Next/build/CMakeFiles/next_log.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.
