@@ -182,6 +182,32 @@ echo_client/fast:
 .PHONY : echo_client/fast
 
 #=============================================================================
+# Target rules for targets named dict_server
+
+# Build rule for target.
+dict_server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dict_server
+.PHONY : dict_server
+
+# fast build rule for target.
+dict_server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dict_server.dir/build.make CMakeFiles/dict_server.dir/build
+.PHONY : dict_server/fast
+
+#=============================================================================
+# Target rules for targets named dict_client
+
+# Build rule for target.
+dict_client: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dict_client
+.PHONY : dict_client
+
+# fast build rule for target.
+dict_client/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dict_client.dir/build.make CMakeFiles/dict_client.dir/build
+.PHONY : dict_client/fast
+
+#=============================================================================
 # Target rules for targets named http_server
 
 # Build rule for target.
@@ -241,6 +267,54 @@ demo/echo/echo_server.s: demo/echo/echo_server.cpp.s
 demo/echo/echo_server.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/echo_server.dir/build.make CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.s
 .PHONY : demo/echo/echo_server.cpp.s
+
+demo/kvstore/dict_client.o: demo/kvstore/dict_client.cpp.o
+.PHONY : demo/kvstore/dict_client.o
+
+# target to build an object file
+demo/kvstore/dict_client.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dict_client.dir/build.make CMakeFiles/dict_client.dir/demo/kvstore/dict_client.cpp.o
+.PHONY : demo/kvstore/dict_client.cpp.o
+
+demo/kvstore/dict_client.i: demo/kvstore/dict_client.cpp.i
+.PHONY : demo/kvstore/dict_client.i
+
+# target to preprocess a source file
+demo/kvstore/dict_client.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dict_client.dir/build.make CMakeFiles/dict_client.dir/demo/kvstore/dict_client.cpp.i
+.PHONY : demo/kvstore/dict_client.cpp.i
+
+demo/kvstore/dict_client.s: demo/kvstore/dict_client.cpp.s
+.PHONY : demo/kvstore/dict_client.s
+
+# target to generate assembly for a file
+demo/kvstore/dict_client.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dict_client.dir/build.make CMakeFiles/dict_client.dir/demo/kvstore/dict_client.cpp.s
+.PHONY : demo/kvstore/dict_client.cpp.s
+
+demo/kvstore/dict_server.o: demo/kvstore/dict_server.cpp.o
+.PHONY : demo/kvstore/dict_server.o
+
+# target to build an object file
+demo/kvstore/dict_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dict_server.dir/build.make CMakeFiles/dict_server.dir/demo/kvstore/dict_server.cpp.o
+.PHONY : demo/kvstore/dict_server.cpp.o
+
+demo/kvstore/dict_server.i: demo/kvstore/dict_server.cpp.i
+.PHONY : demo/kvstore/dict_server.i
+
+# target to preprocess a source file
+demo/kvstore/dict_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dict_server.dir/build.make CMakeFiles/dict_server.dir/demo/kvstore/dict_server.cpp.i
+.PHONY : demo/kvstore/dict_server.cpp.i
+
+demo/kvstore/dict_server.s: demo/kvstore/dict_server.cpp.s
+.PHONY : demo/kvstore/dict_server.s
+
+# target to generate assembly for a file
+demo/kvstore/dict_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dict_server.dir/build.make CMakeFiles/dict_server.dir/demo/kvstore/dict_server.cpp.s
+.PHONY : demo/kvstore/dict_server.cpp.s
 
 src/core/acceptor.o: src/core/acceptor.cpp.o
 .PHONY : src/core/acceptor.o
@@ -661,6 +735,8 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... dict_client"
+	@echo "... dict_server"
 	@echo "... echo_client"
 	@echo "... echo_server"
 	@echo "... http_server"
@@ -673,6 +749,12 @@ help:
 	@echo "... demo/echo/echo_server.o"
 	@echo "... demo/echo/echo_server.i"
 	@echo "... demo/echo/echo_server.s"
+	@echo "... demo/kvstore/dict_client.o"
+	@echo "... demo/kvstore/dict_client.i"
+	@echo "... demo/kvstore/dict_client.s"
+	@echo "... demo/kvstore/dict_server.o"
+	@echo "... demo/kvstore/dict_server.i"
+	@echo "... demo/kvstore/dict_server.s"
 	@echo "... src/core/acceptor.o"
 	@echo "... src/core/acceptor.i"
 	@echo "... src/core/acceptor.s"

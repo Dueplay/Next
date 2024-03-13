@@ -55,5 +55,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/next_log.dir/DependInfo.cmake"
   "CMakeFiles/echo_server.dir/DependInfo.cmake"
   "CMakeFiles/echo_client.dir/DependInfo.cmake"
+  "CMakeFiles/dict_server.dir/DependInfo.cmake"
+  "CMakeFiles/dict_client.dir/DependInfo.cmake"
   "CMakeFiles/http_server.dir/DependInfo.cmake"
   )

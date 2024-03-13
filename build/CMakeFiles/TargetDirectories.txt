@@ -3,6 +3,8 @@
 /home/gxj/Next/build/CMakeFiles/next_log.dir
 /home/gxj/Next/build/CMakeFiles/echo_server.dir
 /home/gxj/Next/build/CMakeFiles/echo_client.dir
+/home/gxj/Next/build/CMakeFiles/dict_server.dir
+/home/gxj/Next/build/CMakeFiles/dict_client.dir
 /home/gxj/Next/build/CMakeFiles/http_server.dir
 /home/gxj/Next/build/CMakeFiles/edit_cache.dir
 /home/gxj/Next/build/CMakeFiles/rebuild_cache.dir

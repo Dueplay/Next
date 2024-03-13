@@ -134,6 +134,22 @@ TARGET_INCLUDE_DIRECTORIES(
         PUBLIC ${NEXT_SERVER_SRC_INCLUDE_DIR}
 )
 
+# Build the dict server
+ADD_EXECUTABLE(dict_server ${NEXT_SERVER_DEMO_DIR}/kvstore/dict_server.cpp)
+TARGET_LINK_LIBRARIES(dict_server next_core next_http)
+TARGET_INCLUDE_DIRECTORIES(
+    dict_server
+        PUBLIC ${NEXT_SERVER_SRC_INCLUDE_DIR}
+)
+
+# Build the dict client
+ADD_EXECUTABLE(dict_client ${NEXT_SERVER_DEMO_DIR}/kvstore/dict_client.cpp)
+TARGET_LINK_LIBRARIES(dict_client next_core next_http)
+TARGET_INCLUDE_DIRECTORIES(
+    dict_client
+        PUBLIC ${NEXT_SERVER_SRC_INCLUDE_DIR}
+)
+
 # Build the http server
 ADD_EXECUTABLE(http_server ${NEXT_SERVER_SRC_DIR}/http/http_server.cpp)
 TARGET_LINK_LIBRARIES(http_server next_core next_http)
