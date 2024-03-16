@@ -208,6 +208,32 @@ dict_client/fast:
 .PHONY : dict_client/fast
 
 #=============================================================================
+# Target rules for targets named file_server
+
+# Build rule for target.
+file_server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 file_server
+.PHONY : file_server
+
+# fast build rule for target.
+file_server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/file_server.dir/build.make CMakeFiles/file_server.dir/build
+.PHONY : file_server/fast
+
+#=============================================================================
+# Target rules for targets named file_client
+
+# Build rule for target.
+file_client: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 file_client
+.PHONY : file_client
+
+# fast build rule for target.
+file_client/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/file_client.dir/build.make CMakeFiles/file_client.dir/build
+.PHONY : file_client/fast
+
+#=============================================================================
 # Target rules for targets named http_server
 
 # Build rule for target.
@@ -267,6 +293,54 @@ demo/echo/echo_server.s: demo/echo/echo_server.cpp.s
 demo/echo/echo_server.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/echo_server.dir/build.make CMakeFiles/echo_server.dir/demo/echo/echo_server.cpp.s
 .PHONY : demo/echo/echo_server.cpp.s
+
+demo/file_server/file_client.o: demo/file_server/file_client.cpp.o
+.PHONY : demo/file_server/file_client.o
+
+# target to build an object file
+demo/file_server/file_client.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/file_client.dir/build.make CMakeFiles/file_client.dir/demo/file_server/file_client.cpp.o
+.PHONY : demo/file_server/file_client.cpp.o
+
+demo/file_server/file_client.i: demo/file_server/file_client.cpp.i
+.PHONY : demo/file_server/file_client.i
+
+# target to preprocess a source file
+demo/file_server/file_client.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/file_client.dir/build.make CMakeFiles/file_client.dir/demo/file_server/file_client.cpp.i
+.PHONY : demo/file_server/file_client.cpp.i
+
+demo/file_server/file_client.s: demo/file_server/file_client.cpp.s
+.PHONY : demo/file_server/file_client.s
+
+# target to generate assembly for a file
+demo/file_server/file_client.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/file_client.dir/build.make CMakeFiles/file_client.dir/demo/file_server/file_client.cpp.s
+.PHONY : demo/file_server/file_client.cpp.s
+
+demo/file_server/file_server.o: demo/file_server/file_server.cpp.o
+.PHONY : demo/file_server/file_server.o
+
+# target to build an object file
+demo/file_server/file_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/file_server.dir/build.make CMakeFiles/file_server.dir/demo/file_server/file_server.cpp.o
+.PHONY : demo/file_server/file_server.cpp.o
+
+demo/file_server/file_server.i: demo/file_server/file_server.cpp.i
+.PHONY : demo/file_server/file_server.i
+
+# target to preprocess a source file
+demo/file_server/file_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/file_server.dir/build.make CMakeFiles/file_server.dir/demo/file_server/file_server.cpp.i
+.PHONY : demo/file_server/file_server.cpp.i
+
+demo/file_server/file_server.s: demo/file_server/file_server.cpp.s
+.PHONY : demo/file_server/file_server.s
+
+# target to generate assembly for a file
+demo/file_server/file_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/file_server.dir/build.make CMakeFiles/file_server.dir/demo/file_server/file_server.cpp.s
+.PHONY : demo/file_server/file_server.cpp.s
 
 demo/kvstore/dict_client.o: demo/kvstore/dict_client.cpp.o
 .PHONY : demo/kvstore/dict_client.o
@@ -739,6 +813,8 @@ help:
 	@echo "... dict_server"
 	@echo "... echo_client"
 	@echo "... echo_server"
+	@echo "... file_client"
+	@echo "... file_server"
 	@echo "... http_server"
 	@echo "... next_core"
 	@echo "... next_http"
@@ -749,6 +825,12 @@ help:
 	@echo "... demo/echo/echo_server.o"
 	@echo "... demo/echo/echo_server.i"
 	@echo "... demo/echo/echo_server.s"
+	@echo "... demo/file_server/file_client.o"
+	@echo "... demo/file_server/file_client.i"
+	@echo "... demo/file_server/file_client.s"
+	@echo "... demo/file_server/file_server.o"
+	@echo "... demo/file_server/file_server.i"
+	@echo "... demo/file_server/file_server.s"
 	@echo "... demo/kvstore/dict_client.o"
 	@echo "... demo/kvstore/dict_client.i"
 	@echo "... demo/kvstore/dict_client.s"

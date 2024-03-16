@@ -150,6 +150,22 @@ TARGET_INCLUDE_DIRECTORIES(
         PUBLIC ${NEXT_SERVER_SRC_INCLUDE_DIR}
 )
 
+# Build the fileserver
+ADD_EXECUTABLE(file_server ${NEXT_SERVER_DEMO_DIR}/file_server/file_server.cpp)
+TARGET_LINK_LIBRARIES(file_server next_core next_http)
+TARGET_INCLUDE_DIRECTORIES(
+    file_server
+        PUBLIC ${NEXT_SERVER_SRC_INCLUDE_DIR}
+)
+
+# Build the file client
+ADD_EXECUTABLE(file_client ${NEXT_SERVER_DEMO_DIR}/file_server/file_client.cpp)
+TARGET_LINK_LIBRARIES(file_client next_core next_http)
+TARGET_INCLUDE_DIRECTORIES(
+    file_client
+        PUBLIC ${NEXT_SERVER_SRC_INCLUDE_DIR}
+)
+
 # Build the http server
 ADD_EXECUTABLE(http_server ${NEXT_SERVER_SRC_DIR}/http/http_server.cpp)
 TARGET_LINK_LIBRARIES(http_server next_core next_http)
