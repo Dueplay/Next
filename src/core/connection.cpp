@@ -1,10 +1,9 @@
 #include "core/connection.h"
-#include "log/logger.h"
 #include <sys/socket.h>
+#include "log/logger.h"
 namespace Next {
 Connection::Connection(std::unique_ptr<Socket> socket)
-    : socket_(std::move(socket)), read_buffer_(std::make_unique<Buffer>()),
-      write_buffer_(std::make_unique<Buffer>()) {}
+    : socket_(std::move(socket)), read_buffer_(std::make_unique<Buffer>()), write_buffer_(std::make_unique<Buffer>()) {}
 
 auto Connection::GetFd() const noexcept -> int { return socket_->GetFd(); }
 auto Connection::GetSocket() noexcept -> Socket * { return socket_.get(); }
@@ -20,41 +19,26 @@ void Connection::SetCallback(std::function<void(Connection *)> callback) {
   // 为可调用对象。将成员callback_设置lambda,在lam中调用callback(参数为this)
   callback_ = [callback, this]() { return callback(this); };
 }
-auto Connection::GetCallback() noexcept -> std::function<void()> {
-  return callback_;
-}
+auto Connection::GetCallback() noexcept -> std::function<void()> { return callback_; }
 
 /* for Buffer */
-auto Connection::FindAndPopTill(const std::string &target)
-    -> std::optional<std::string> {
+auto Connection::FindAndPopTill(const std::string &target) -> std::optional<std::string> {
   return read_buffer_->FindAndPopTill(target);
 }
 
-auto Connection::GetReadBufferSize() const noexcept -> size_t {
-  return read_buffer_->Size();
-}
-auto Connection::GetWriteBufferSize() const noexcept -> size_t {
-  return write_buffer_->Size();
-}
-void Connection::WriteToReadBuffer(const unsigned char *buf, size_t size) {
-  read_buffer_->Append(buf, size);
-}
-void Connection::WriteToWriteBuffer(const unsigned char *buf, size_t size) {
-  write_buffer_->Append(buf, size);
-}
-void Connection::WriteToReadBuffer(const std::string &str) {
-  read_buffer_->Append(str);
-}
-void Connection::WriteToWriteBuffer(const std::string &str) {
-  write_buffer_->Append(str);
-}
+auto Connection::GetReadBufferSize() const noexcept -> size_t { return read_buffer_->Size(); }
+auto Connection::GetWriteBufferSize() const noexcept -> size_t { return write_buffer_->Size(); }
+
+void Connection::WriteToReadBuffer(const unsigned char *buf, size_t size) { read_buffer_->Append(buf, size); }
+void Connection::WriteToReadBuffer(const std::string &str) { read_buffer_->Append(str); }
+
+void Connection::WriteToWriteBuffer(const unsigned char *buf, size_t size) { write_buffer_->Append(buf, size); }
+void Connection::WriteToWriteBuffer(const std::string &str) { write_buffer_->Append(str); }
 void Connection::WriteToWriteBuffer(std::vector<unsigned char> &&other_buf) {
   write_buffer_->Append(std::move(other_buf));
 }
 
-auto Connection::Read() const noexcept -> const unsigned char * {
-  return read_buffer_->Data();
-}
+auto Connection::Read() const noexcept -> const unsigned char * { return read_buffer_->Data(); }
 auto Connection::ReadAsString() const noexcept -> std::string {
   auto string_view = read_buffer_->ToStringView();
   return {string_view.begin(), string_view.end()};
@@ -113,4 +97,4 @@ void Connection::ClearWriteBuffer() noexcept { write_buffer_->Clear(); }
 
 void Connection::SetLooper(Looper *looper) noexcept { owner_looper_ = looper; }
 auto Connection::GetLooper() noexcept -> Looper * { return owner_looper_; }
-} // namespace Next
+}  // namespace Next

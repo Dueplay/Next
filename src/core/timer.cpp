@@ -1,11 +1,11 @@
 #include "core/timer.h"
+#include <unistd.h>
+#include <chrono>
+#include <cstring>
 #include "core/connection.h"
 #include "core/poller.h"
 #include "core/socket.h"
 #include "log/logger.h"
-#include <chrono>
-#include <cstring>
-#include <unistd.h>
 
 namespace Next {
 
@@ -16,8 +16,7 @@ auto NowSinceEpoch() noexcept -> uint64_t {
   auto now = std::chrono::high_resolution_clock::now();
   auto duration = now.time_since_epoch();
   // 从epoch开始到now有多少ms
-  return static_cast<uint64_t>(
-      std::chrono::duration_cast<std::chrono::milliseconds>(duration).count());
+  return static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::milliseconds>(duration).count());
 }
 
 auto FromNow(uint64_t timestamp) noexcept -> uint64_t {
@@ -31,8 +30,7 @@ auto FromNowInTimeSpec(uint64_t timestamp) noexcept -> struct timespec {
   struct timespec ts;
   // static_cast去掉const，将timestamp与now的差距多少ms转为 s.ns
   ts.tv_sec = static_cast<time_t>(from_now_mills / MILLS_IN_SECOND);
-  ts.tv_nsec =
-      static_cast<int64_t>((from_now_mills % MILLS_IN_SECOND) * NANOS_IN_MILL);
+  ts.tv_nsec = static_cast<int64_t>((from_now_mills % MILLS_IN_SECOND) * NANOS_IN_MILL);
   return ts;
 }
 
@@ -50,18 +48,12 @@ void ResetTimerFd(int timer_fd, struct timespec ts) {
 }
 
 // 从构造的时间 + expire_from_now作为超时的时间点expire_time_
-Timer::SingleTimer::SingleTimer(uint64_t expire_from_now,
-                                std::function<void()> callback) noexcept
-    : expire_time_(NowSinceEpoch() + expire_from_now),
-      callback_(std::move(callback)) {}
+Timer::SingleTimer::SingleTimer(uint64_t expire_from_now, std::function<void()> callback) noexcept
+    : expire_time_(NowSinceEpoch() + expire_from_now), callback_(std::move(callback)) {}
 
-auto Timer::SingleTimer::WhenExpire() const noexcept -> uint64_t {
-  return expire_time_;
-}
+auto Timer::SingleTimer::WhenExpire() const noexcept -> uint64_t { return expire_time_; }
 
-auto Timer::SingleTimer::Expired() const noexcept -> bool {
-  return NowSinceEpoch() >= expire_time_;
-}
+auto Timer::SingleTimer::Expired() const noexcept -> bool { return NowSinceEpoch() >= expire_time_; }
 
 void Timer::SingleTimer::Run() noexcept {
   if (callback_) {
@@ -69,18 +61,14 @@ void Timer::SingleTimer::Run() noexcept {
   }
 }
 
-auto Timer::SingleTimer::GetCallback() const noexcept -> std::function<void()> {
-  return callback_;
-}
+auto Timer::SingleTimer::GetCallback() const noexcept -> std::function<void()> { return callback_; }
 
-Timer::Timer()
-    : timer_fd_(timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC)) {
+Timer::Timer() : timer_fd_(timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC)) {
   if (timer_fd_ < 0) {
     LOG_FATAL("Timer() : timerfd_create fails");
     exit(EXIT_FAILURE);
   }
-  timer_conn_ =
-      std::make_unique<Connection>(std::make_unique<Socket>(timer_fd_));
+  timer_conn_ = std::make_unique<Connection>(std::make_unique<Socket>(timer_fd_));
   timer_conn_->SetEvents(POLL_READ | POLL_ET);
   timer_conn_->SetCallback(std::bind(&Timer::HandleRead, this));
 }
@@ -89,25 +77,21 @@ auto Timer::GetTimerConnection() -> Connection * { return timer_conn_.get(); }
 
 auto Timer::GetTimerFd() -> int { return timer_fd_; }
 
-auto Timer::AddSingleTimer(uint64_t expire_from_now,
-                           const std::function<void()> &callback) noexcept
-    -> SingleTimer * {
-  std::unique_lock<std::mutex> lock(mtx_); // 对queue实现互斥访问
+auto Timer::AddSingleTimer(uint64_t expire_from_now, const std::function<void()> &callback) noexcept -> SingleTimer * {
+  std::unique_lock<std::mutex> lock(mtx_);  // 对queue实现互斥访问
   auto new_timer = std::make_unique<SingleTimer>(expire_from_now, callback);
   auto raw_timer = new_timer.get();
   timer_queue_.emplace(raw_timer, std::move(new_timer));
   uint64_t new_next_expire = NextExpireTime();
   if (new_next_expire != next_expire_) {
     next_expire_ = new_next_expire;
-    ResetTimerFd(
-        timer_fd_,
-        FromNowInTimeSpec(
-            next_expire_)); // 添加新的timer后，下次超时时间变了，修改为新的
+    ResetTimerFd(timer_fd_,
+                 FromNowInTimeSpec(next_expire_));  // 添加新的timer后，下次超时时间变了，修改为新的
   }
   return raw_timer;
 }
 
-auto Timer::RemoveSingleTimer(SingleTimer *single_timer) noexcept -> bool {
+auto Timer::RemoveSingleTimer(Timer::SingleTimer *single_timer) noexcept -> bool {
   std::unique_lock<std::mutex> lock(mtx_);
   auto it = timer_queue_.find(single_timer);
   if (it != timer_queue_.end()) {
@@ -116,9 +100,8 @@ auto Timer::RemoveSingleTimer(SingleTimer *single_timer) noexcept -> bool {
     uint64_t new_next_expire = NextExpireTime();
     if (new_next_expire != next_expire_) {
       next_expire_ = new_next_expire;
-      ResetTimerFd(
-          timer_fd_,
-          FromNowInTimeSpec(next_expire_)); // 下次超时时间变了，修改为新的
+      ResetTimerFd(timer_fd_,
+                   FromNowInTimeSpec(next_expire_));  // 下次超时时间变了，修改为新的
     }
     return true;
   }
@@ -126,42 +109,34 @@ auto Timer::RemoveSingleTimer(SingleTimer *single_timer) noexcept -> bool {
 }
 
 // 更新SingleTimer队列中某个SingleTimer的expire_from_now
-auto Timer::RefreshSingleTimer(SingleTimer *single_timer,
-                               uint64_t expire_from_now) noexcept
+auto Timer::RefreshSingleTimer(Timer::SingleTimer *single_timer, uint64_t expire_from_now) noexcept
     -> Timer::SingleTimer * {
   std::unique_lock<std::mutex> lock(mtx_);
   auto it = timer_queue_.find(single_timer);
   if (it == timer_queue_.end()) {
     return nullptr;
   }
-  auto new_timer = std::make_unique<SingleTimer>(expire_from_now,
-                                                 single_timer->GetCallback());
+  auto new_timer = std::make_unique<SingleTimer>(expire_from_now, single_timer->GetCallback());
   auto raw_timer = new_timer.get();
   timer_queue_.erase(it);
   timer_queue_.emplace(raw_timer, std::move(new_timer));
   uint64_t new_next_expire = NextExpireTime();
   if (new_next_expire != next_expire_) {
     next_expire_ = new_next_expire;
-    ResetTimerFd(
-        timer_fd_,
-        FromNowInTimeSpec(
-            next_expire_)); // 添加新的timer后，下次超时时间变了，修改为新的
+    ResetTimerFd(timer_fd_,
+                 FromNowInTimeSpec(next_expire_));  // 添加新的timer后，下次超时时间变了，修改为新的
   }
   return raw_timer;
 }
 
 auto Timer::NextExpireTime() const noexcept -> uint64_t {
-  if (timer_queue_.empty())
-    return 0;
+  if (timer_queue_.empty()) return 0;
   return timer_queue_.begin()->first->WhenExpire();
 }
 
-auto Timer::TimerCount() const noexcept -> size_t {
-  return timer_queue_.size();
-}
+auto Timer::TimerCount() const noexcept -> size_t { return timer_queue_.size(); }
 
-auto Timer::PruneExpiredTimer() noexcept
-    -> std::vector<std::unique_ptr<SingleTimer>> {
+auto Timer::PruneExpiredTimer() noexcept -> std::vector<std::unique_ptr<SingleTimer>> {
   std::unique_lock<std::mutex> lock(mtx_);
   std::vector<std::unique_ptr<SingleTimer>> expired;
   auto it = timer_queue_.begin();
@@ -170,6 +145,7 @@ auto Timer::PruneExpiredTimer() noexcept
       break;
     }
   }
+  // begin till it has expired and we are to remove them
   for (auto expired_it = timer_queue_.begin(); expired_it != it; expired_it++) {
     expired.push_back(std::move(expired_it->second));
   }
@@ -178,10 +154,8 @@ auto Timer::PruneExpiredTimer() noexcept
   uint64_t new_next_expire = NextExpireTime();
   if (new_next_expire != next_expire_) {
     next_expire_ = new_next_expire;
-    ResetTimerFd(
-        timer_fd_,
-        FromNowInTimeSpec(
-            next_expire_)); // 移出超时的定时器，下次超时时间变了，修改为新的
+    ResetTimerFd(timer_fd_,
+                 FromNowInTimeSpec(next_expire_));  // 移出超时的定时器，下次超时时间变了，修改为新的
   }
   return expired;
 }
@@ -206,9 +180,8 @@ void Timer::HandleRead() {
 }
 
 // map中超时时间从小到大排序
-auto Timer::SingleTimerCompartor::operator()(
-    const SingleTimer *lhs, const SingleTimer *rhs) const noexcept -> bool {
+auto Timer::SingleTimerCompartor::operator()(const SingleTimer *lhs, const SingleTimer *rhs) const noexcept -> bool {
   return lhs->WhenExpire() < rhs->WhenExpire();
 }
 
-} // namespace Next
+}  // namespace Next

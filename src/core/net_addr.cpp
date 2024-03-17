@@ -5,9 +5,10 @@ NetAddress::NetAddress() noexcept {
   memset(&addr_, 0, sizeof(addr_));
   addr_len_ = sizeof(addr_);
 }
-NetAddress::NetAddress(const char *ip, uint16_t port, Protocol protocol)
-    : NetAddress() {
-  if (protocol == Protocol::Ipv4) {
+NetAddress::NetAddress(const char *ip, uint16_t port, Protocol protocol) : protocol_(protocol) {
+  memset(&addr_, 0, sizeof(addr_));
+  addr_len_ = sizeof(addr_);
+  if (protocol_ == Protocol::Ipv4) {
     auto sockaddr_in4_ = reinterpret_cast<struct sockaddr_in *>(&addr_);
     sockaddr_in4_->sin_family = AF_INET;
     inet_pton(AF_INET, ip, &sockaddr_in4_->sin_addr.s_addr);
@@ -20,25 +21,24 @@ NetAddress::NetAddress(const char *ip, uint16_t port, Protocol protocol)
   }
 }
 
-auto NetAddress::ToSockaddr() -> struct sockaddr * {
-  return reinterpret_cast<struct sockaddr *>(&addr_);
-}
+auto NetAddress::ToSockaddr() -> struct sockaddr * { return reinterpret_cast<struct sockaddr *>(&addr_); }
 
 auto NetAddress::getSocklen() -> socklen_t * { return &addr_len_; }
 
-auto NetAddress::getProtocol() const noexcept -> Protocol { return protocol_; }
+auto NetAddress::GetProtocol() const noexcept -> Protocol { return protocol_; }
 
 auto NetAddress::GetIp() const noexcept -> std::string {
   char ip_address[INET6_ADDRSTRLEN];
   if (protocol_ == Protocol::Ipv4) {
     auto sockaddr_ipv4 = reinterpret_cast<struct sockaddr_in *>(&addr_);
-    inet_ntop(AF_INET, &sockaddr_ipv4->sin_addr, ip_address, INET6_ADDRSTRLEN);
+    inet_ntop(AF_INET, &sockaddr_ipv4->sin_addr, ip_address, INET_ADDRSTRLEN);
   } else {
     auto sockaddr_ipv6 = reinterpret_cast<struct sockaddr_in6 *>(&addr_);
-    inet_ntop(AF_INET, &sockaddr_ipv6->sin6_addr, ip_address, INET6_ADDRSTRLEN);
+    inet_ntop(AF_INET6, &sockaddr_ipv6->sin6_addr, ip_address, INET6_ADDRSTRLEN);
   }
   return ip_address;
 }
+
 auto NetAddress::GetPort() const noexcept -> uint16_t {
   uint16_t port;
   if (protocol_ == Protocol::Ipv4) {
@@ -59,4 +59,4 @@ auto operator<<(std::ostream &os, const NetAddress &address) -> std::ostream & {
   return os;
 }
 
-} // namespace Next
+}  // namespace Next

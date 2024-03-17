@@ -495,3 +495,18 @@ int main(void)
   return 0;
 }
 
+Performing C++ SOURCE FILE Test HAVE_FLAG__ffile_prefix_map__home_gxj_Next_build__deps_catch2_src__ succeeded with the following output:
+Change Dir: /home/gxj/Next/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_c4381/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_c4381.dir/build.make CMakeFiles/cmTC_c4381.dir/build
+gmake[1]: Entering directory '/home/gxj/Next/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_c4381.dir/src.cxx.o
+/usr/bin/c++ -DHAVE_FLAG__ffile_prefix_map__home_gxj_Next_build__deps_catch2_src__  -ffile-prefix-map=/home/gxj/Next/build/_deps/catch2-src/= -std=gnu++17 -o CMakeFiles/cmTC_c4381.dir/src.cxx.o -c /home/gxj/Next/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_c4381
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c4381.dir/link.txt --verbose=1
+/usr/bin/c++ CMakeFiles/cmTC_c4381.dir/src.cxx.o -o cmTC_c4381 
+gmake[1]: Leaving directory '/home/gxj/Next/build/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main() { return 0; }

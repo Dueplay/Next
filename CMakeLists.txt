@@ -78,6 +78,8 @@ SET(NEXT_SERVER_SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 SET(NEXT_SERVER_SRC_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/src/include)
 SET(NEXT_MYSQL_INCLUDE_DIR "/usr/include/cppconn") # Linux only, might not be portable
 SET(NEXT_SERVER_DEMO_DIR ${PROJECT_SOURCE_DIR}/demo)
+SET(NEXT_SERVER_TEST_DIR ${PROJECT_SOURCE_DIR}/test)
+SET(NEXT_SERVER_TEST_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/test/include)
 
 # Build
 ######################################################################################################################
@@ -175,5 +177,88 @@ TARGET_INCLUDE_DIRECTORIES(
         PUBLIC ${NEXT_SERVER_SRC_INCLUDE_DIR}
 )
 
+######################################################################################################################
+# Test (Catch2)
+######################################################################################################################
+
+# fetch the Catch2 from github
+INCLUDE(FetchContent)
+
+FetchContent_Declare(
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG        v3.3.0 # or a later release
+)
+
+FetchContent_MakeAvailable(Catch2)
+
+# build and link individual tests with Catch2
+ADD_EXECUTABLE(buffer_test ${NEXT_SERVER_TEST_DIR}/core/buffer_test.cpp)
+TARGET_LINK_LIBRARIES(buffer_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(cache_test ${NEXT_SERVER_TEST_DIR}/core/cache_test.cpp)
+TARGET_LINK_LIBRARIES(cache_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(timer_test ${NEXT_SERVER_TEST_DIR}/core/timer_test.cpp)
+TARGET_LINK_LIBRARIES(timer_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(net_address_test ${NEXT_SERVER_TEST_DIR}/core/net_address_test.cpp)
+TARGET_LINK_LIBRARIES(net_address_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(socket_test ${NEXT_SERVER_TEST_DIR}/core/socket_test.cpp)
+TARGET_LINK_LIBRARIES(socket_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(connection_test ${NEXT_SERVER_TEST_DIR}/core/connection_test.cpp)
+TARGET_LINK_LIBRARIES(connection_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(poller_test ${NEXT_SERVER_TEST_DIR}/core/poller_test.cpp)
+TARGET_LINK_LIBRARIES(poller_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(looper_test ${NEXT_SERVER_TEST_DIR}/core/looper_test.cpp)
+TARGET_LINK_LIBRARIES(looper_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(acceptor_test ${NEXT_SERVER_TEST_DIR}/core/acceptor_test.cpp)
+TARGET_LINK_LIBRARIES(acceptor_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(thread_pool_test ${NEXT_SERVER_TEST_DIR}/core/thread_pool_test.cpp)
+TARGET_LINK_LIBRARIES(thread_pool_test PRIVATE Catch2::Catch2WithMain next_core)
+
+ADD_EXECUTABLE(header_test ${NEXT_SERVER_TEST_DIR}/http/header_test.cpp)
+TARGET_LINK_LIBRARIES(header_test PRIVATE Catch2::Catch2WithMain next_core next_http)
+
+ADD_EXECUTABLE(request_test ${NEXT_SERVER_TEST_DIR}/http/request_test.cpp)
+TARGET_LINK_LIBRARIES(request_test PRIVATE Catch2::Catch2WithMain next_core next_http)
+
+ADD_EXECUTABLE(response_test ${NEXT_SERVER_TEST_DIR}/http/response_test.cpp)
+TARGET_LINK_LIBRARIES(response_test PRIVATE Catch2::Catch2WithMain next_core next_http)
+
+ADD_EXECUTABLE(cgier_test ${NEXT_SERVER_TEST_DIR}/http/cgier_test.cpp)
+TARGET_LINK_LIBRARIES(cgier_test PRIVATE Catch2::Catch2WithMain next_core next_http)
+
+# helper program to test cgi module, used the `cgi_test`
+ADD_EXECUTABLE(add ${CMAKE_SOURCE_DIR}/http_dir/cgi-bin/add.c)
+ADD_EXECUTABLE(helloworld ${CMAKE_SOURCE_DIR}/http_dir/cgi-bin/helloworld.c)
 
 
+# automatic discover and run all the tests with 'ctest' or 'make test'
+LIST(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+INCLUDE(CTest)
+INCLUDE(Catch)
+
+# Core Module
+CATCH_DISCOVER_TESTS(buffer_test)
+CATCH_DISCOVER_TESTS(cache_test)
+CATCH_DISCOVER_TESTS(timer_test)
+CATCH_DISCOVER_TESTS(net_address_test)
+CATCH_DISCOVER_TESTS(socket_test)
+CATCH_DISCOVER_TESTS(connection_test)
+CATCH_DISCOVER_TESTS(poller_test)
+CATCH_DISCOVER_TESTS(looper_test)
+CATCH_DISCOVER_TESTS(acceptor_test)
+CATCH_DISCOVER_TESTS(thread_pool_test)
+
+# HTTP Module
+CATCH_DISCOVER_TESTS(header_test)
+CATCH_DISCOVER_TESTS(request_test)
+CATCH_DISCOVER_TESTS(response_test)
+CATCH_DISCOVER_TESTS(cgier_test)

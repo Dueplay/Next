@@ -5,15 +5,14 @@
 #include <string>
 #include <vector>
 namespace Next::Http {
-class Header;
 enum class Method;
 enum class Version;
 
 class Header {
-public:
+ public:
   Header(const std::string &key, const std::string &value);
   Header(std::string &&key, std::string &&value);
-  explicit Header(const std::string &line); // deserialize method
+  explicit Header(const std::string &line);  // deserialize method
   Header(const Header &other) = default;
   Header(Header &&other) noexcept;
   auto operator=(const Header &other) -> Header & = default;
@@ -26,14 +25,13 @@ public:
   void SetValue(const std::string &new_value) noexcept;
   auto Serialize() const -> std::string;
 
-  friend auto operator<<(std::ostream &os, const Header &header)
-      -> std::ostream &;
+  friend auto operator<<(std::ostream &os, const Header &header) -> std::ostream &;
 
-private:
+ private:
   std::string key_;
   std::string value_;
   bool valid_{true};
 };
-} // namespace Next::Http
+}  // namespace Next::Http
 
 #endif

@@ -1,8 +1,10 @@
 #include "core/socket.h"
-#include <cassert>
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <cassert>
+#include <stdexcept>
+#include "log/logger.h"
 
 namespace Next {
 
@@ -19,7 +21,7 @@ auto Socket::operator=(Socket &&other) noexcept -> Socket & {
   if (fd_ != -1) {
     close(fd_);
   }
-  std::swap(other.fd_, fd_);
+  std::swap(fd_, other.fd_);
   return *this;
 }
 
@@ -33,41 +35,43 @@ auto Socket::GetFd() const noexcept -> int { return fd_; }
 
 void Socket::Connect(NetAddress &server_addr) {
   if (fd_ == -1) {
-    CreateByProtocol(server_addr.getProtocol());
+    CreateByProtocol(server_addr.GetProtocol());
   }
-  if (connect(fd_, server_addr.ToSockaddr(), *server_addr.getSocklen()) ==
-      -1) { // log error
+  if (connect(fd_, server_addr.ToSockaddr(), *server_addr.getSocklen()) == -1) {
+    LOG_ERROR("Socket: Connect() error");
+    throw std::logic_error("Socket: Connect() error");
   }
 }
 
-void Socket::Bind(NetAddress &server_addr, SocketFlag flag) {
+void Socket::Bind(NetAddress &server_addr, bool set_reusable /*= true*/) {
   if (fd_ == -1) {
     // fist create fd
-    CreateByProtocol(server_addr.getProtocol());
+    CreateByProtocol(server_addr.GetProtocol());
   }
-  if (flag == SocketFlag::set_reusable) {
+  if (set_reusable) {
     // 设置端口复用
     SetReusable();
   }
   if (bind(fd_, server_addr.ToSockaddr(), *server_addr.getSocklen()) == -1) {
-    // 错误日志
+    LOG_ERROR("Socket: Bind() error");
+    throw std::logic_error("Socket: Bind() error");
   }
 }
 
 void Socket::Listen() {
   assert(fd_ != -1 && "cannot Listen with invalid fd");
   if (listen(fd_, BACK_LOG) == -1) {
-    // error
+    LOG_ERROR("Socket: Listen() error");
+    throw std::logic_error("Socket: Listen() error");
   }
 }
 
 auto Socket::Accept(NetAddress &client_addr) -> int {
   assert(fd_ != -1 && "cannot Accept with invaild fd");
-  int clien_fd =
-      accept(fd_, client_addr.ToSockaddr(), client_addr.getSocklen());
+  int clien_fd = accept(fd_, client_addr.ToSockaddr(), client_addr.getSocklen());
   if (clien_fd == -1) {
     // 高压力下，accept可能会失败，但服务器不能因为这个失败终止掉。
-    // log
+    LOG_WARNING("Socket: Accept() error");
   }
   return clien_fd;
 }
@@ -77,14 +81,16 @@ void Socket::SetReusable() {
   int yes = 1;
   if (setsockopt(fd_, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof yes) == -1 ||
       setsockopt(fd_, SOL_SOCKET, SO_REUSEPORT, &yes, sizeof yes) == -1) {
-    // log error
+    LOG_ERROR("Socket: SetReusable() error");
+    throw std::logic_error("Socket: SetReusable() error");
   }
 }
 
 void Socket::SetNonBlocking() {
   assert(fd_ != -1 && "cannot SetNonBlocking with invaild fd");
   if (fcntl(fd_, F_SETFL, fcntl(fd_, F_GETFL) | O_NONBLOCK) == -1) {
-    // log error
+    LOG_ERROR("Socket: SetNonBlocking() error");
+    throw std::logic_error("Socket: SetNonBlocking() error");
   }
 }
 
@@ -95,7 +101,8 @@ void Socket::CreateByProtocol(Protocol protocol) {
     fd_ = socket(AF_INET6, SOCK_STREAM, 0);
   }
   if (fd_ == -1) {
-    // error
+    LOG_ERROR("Socket: socket() error");
+    throw std::logic_error("Socket: socket() error");
   }
 }
 
@@ -104,4 +111,4 @@ auto Socket::GetAttr() -> int {
   return fcntl(fd_, F_GETFL);
 }
 
-} // namespace Next
+}  // namespace Next

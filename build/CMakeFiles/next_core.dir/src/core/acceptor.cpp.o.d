@@ -1,7 +1,7 @@
 CMakeFiles/next_core.dir/src/core/acceptor.cpp.o: \
  /home/gxj/Next/src/core/acceptor.cpp /usr/include/stdc-predef.h \
  /home/gxj/Next/src/include/core/acceptor.h \
- /home/gxj/Next/src/include/core/utils.h /usr/include/c++/11/functional \
+ /usr/include/c++/11/functional \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -143,6 +143,7 @@ CMakeFiles/next_core.dir/src/core/acceptor.cpp.o: \
  /usr/include/c++/11/backward/auto_ptr.h \
  /usr/include/c++/11/pstl/glue_memory_defs.h \
  /usr/include/c++/11/pstl/execution_defs.h \
+ /home/gxj/Next/src/include/core/utils.h \
  /home/gxj/Next/src/include/core/connection.h \
  /home/gxj/Next/src/include/core/buffer.h /usr/include/c++/11/optional \
  /usr/include/c++/11/string /usr/include/c++/11/bits/char_traits.h \

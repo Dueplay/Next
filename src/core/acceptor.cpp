@@ -8,14 +8,13 @@
 
 namespace Next {
 
-Acceptor::Acceptor(Looper *listener, std::vector<Looper *> reactors,
-                   NetAddress server_address)
+Acceptor::Acceptor(Looper *listener, std::vector<Looper *> reactors, NetAddress server_address)
     : reactors_(std::move(reactors)) {
   auto acceptor_sock = std::make_unique<Socket>();
-  acceptor_sock->Bind(server_address, SocketFlag::set_reusable);
+  acceptor_sock->Bind(server_address, true);
   acceptor_sock->Listen();
   acceptor_conn_ = std::make_unique<Connection>(std::move(acceptor_sock));
-  acceptor_conn_->SetEvents(POLL_READ);
+  acceptor_conn_->SetEvents(POLL_READ);  // not edge-trigger for listener
   acceptor_conn_->SetLooper(listener);
   listener->AddAcceptor(acceptor_conn_.get());
   SetCustomAcceptCallback([](Connection *) {});
@@ -34,12 +33,11 @@ void Acceptor::BaseAcceptCallback(Connection *server_conn) {
   auto client_sock = std::make_unique<Socket>(accept_fd);
   client_sock->SetNonBlocking();
   auto client_conn = std::make_unique<Connection>(std::move(client_sock));
-  client_conn->SetEvents(POLL_READ | POLL_ET);
+  client_conn->SetEvents(POLL_READ | POLL_ET);  // edge-trigger for client
   client_conn->SetCallback(GetCustomHandleCallback());
 
   int idx = rand() % reactors_.size();
-  LOG_INFO("new client fd=" + std::to_string(client_conn->GetFd()) +
-           " maps to reactor " + std::to_string(idx));
+  LOG_INFO("new client fd=" + std::to_string(client_conn->GetFd()) + " maps to reactor " + std::to_string(idx));
   client_conn->SetLooper(reactors_[idx]);
   reactors_[idx]->AddConnection(std::move(client_conn));
 }
@@ -50,8 +48,7 @@ void Acceptor::BaseHandleCallback(Connection *client_conn) {
     client_conn->GetLooper()->RefreshConnection(fd);
   }
 }
-void Acceptor::SetCustomAcceptCallback(
-    std::function<void(Connection *)> custom_accept_callback) {
+void Acceptor::SetCustomAcceptCallback(std::function<void(Connection *)> custom_accept_callback) {
   custom_accept_callback_ = std::move(custom_accept_callback);
   acceptor_conn_->SetCallback([this](auto &&PH1) {
     BaseAcceptCallback(std::forward<decltype(PH1)>(PH1));
@@ -59,26 +56,20 @@ void Acceptor::SetCustomAcceptCallback(
   });
 }
 
-void Acceptor::SetCustomHandleCallback(
-    std::function<void(Connection *)> custom_handle_callback) {
-  custom_handle_callback_ =
-      [this, callback = std::move(custom_handle_callback)](auto &&PH1) {
-        BaseHandleCallback(std::forward<decltype(PH1)>(PH1));
-        callback(std::forward<decltype(PH1)>(PH1));
-      };
+void Acceptor::SetCustomHandleCallback(std::function<void(Connection *)> custom_handle_callback) {
+  custom_handle_callback_ = [this, callback = std::move(custom_handle_callback)](auto &&PH1) {
+    BaseHandleCallback(std::forward<decltype(PH1)>(PH1));
+    callback(std::forward<decltype(PH1)>(PH1));
+  };
 }
 
-auto Acceptor::GetCustomAcceptCallback() const noexcept
-    -> std::function<void(Connection *)> {
+auto Acceptor::GetCustomAcceptCallback() const noexcept -> std::function<void(Connection *)> {
   return custom_accept_callback_;
 }
 
-auto Acceptor::GetCustomHandleCallback() const noexcept
-    -> std::function<void(Connection *)> {
+auto Acceptor::GetCustomHandleCallback() const noexcept -> std::function<void(Connection *)> {
   return custom_handle_callback_;
 }
 
-auto Acceptor::GetAcceptorConnection() noexcept -> Connection * {
-  return acceptor_conn_.get();
-}
-} // namespace Next
+auto Acceptor::GetAcceptorConnection() noexcept -> Connection * { return acceptor_conn_.get(); }
+}  // namespace Next
