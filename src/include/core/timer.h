@@ -13,6 +13,7 @@ namespace Next {
 class Socket;
 class Connection;
 auto NowSinceEpoch() noexcept -> uint64_t;
+auto NowSinceEpoch2() noexcept -> uint64_t;
 
 auto FromNow(uint64_t timestamp) noexcept -> uint64_t;
 

@@ -18,7 +18,7 @@ Looper::Looper(uint64_t timer_expiration)
 // 通过poller_->Poll获取epoll中就绪的事件对应的connection，然后执行他们的回调conn->GetCallback()();
 void Looper::Loop() {
   while (!exit_) {
-    auto ready_connections = poller_->Poll();
+    auto ready_connections = poller_->Poll(TIMEOUT);
     Connection *timer_conn = nullptr;
 
     for (auto &conn : ready_connections) {

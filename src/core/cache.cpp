@@ -12,6 +12,7 @@ auto GetTimeUtc() noexcept -> uint64_t {
           .count();
   return mill_since_epoch;
 }
+
 Cache::CacheNode::CacheNode() noexcept { UpdataTimeStamp(); }
 Cache::CacheNode::CacheNode(std::string identifier,
                             const std::vector<unsigned char> &data)
@@ -91,6 +92,7 @@ void Cache::Clear() {
 }
 
 void Cache::EvictOne() noexcept {
+  // lru策略，第一个是最久未使用的。
   auto *first_node = header_->next_;
   auto resource_size = first_node->Size();
   auto iter = mapping_.find(first_node->identifier_); // friend
@@ -99,6 +101,16 @@ void Cache::EvictOne() noexcept {
   mapping_.erase(iter);
   occupancy_ -= resource_size;
 }
+
+void Cache::EvictOneByUrl(const std::string& url) noexcept {
+  auto iter = mapping_.find(url); // friend
+  assert(iter != mapping_.end());
+  auto resource_size = iter->second->Size();
+  RemoveFromList(iter->second);
+  mapping_.erase(iter);
+  occupancy_ -= resource_size;
+}
+
 void Cache::RemoveFromList(const std::shared_ptr<CacheNode> &node) noexcept {
   auto *node_ptr = node.get();
   auto *node_prev = node_ptr->prev_;

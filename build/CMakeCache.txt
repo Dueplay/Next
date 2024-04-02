@@ -493,6 +493,9 @@ GITCOMMAND:FILEPATH=/usr/bin/git
 //Git command line client
 GIT_EXECUTABLE:FILEPATH=/usr/bin/git
 
+//No help, variable specified on the command line.
+LOG_LEVEL:UNINITIALIZED=NOLOG
+
 //Command to build the project
 MAKECOMMAND:STRING=/usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}"
 

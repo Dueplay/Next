@@ -49,7 +49,7 @@ public:
                  const std::vector<unsigned char> &source) -> bool;
 
   void Clear();
-
+  void EvictOneByUrl(const std::string& url) noexcept;
 private:
   void EvictOne() noexcept;
   void RemoveFromList(const std::shared_ptr<CacheNode> &node) noexcept;

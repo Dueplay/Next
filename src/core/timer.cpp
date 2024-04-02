@@ -18,6 +18,12 @@ auto NowSinceEpoch() noexcept -> uint64_t {
   // 从epoch开始到now有多少ms
   return static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::milliseconds>(duration).count());
 }
+auto NowSinceEpoch2() noexcept -> uint64_t {
+  auto now = std::chrono::high_resolution_clock::now();
+  auto duration = now.time_since_epoch();
+  // 从epoch开始到now有多少ns
+  return static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count());
+}
 
 auto FromNow(uint64_t timestamp) noexcept -> uint64_t {
   auto now = NowSinceEpoch();
@@ -70,6 +76,8 @@ Timer::Timer() : timer_fd_(timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CL
   }
   timer_conn_ = std::make_unique<Connection>(std::make_unique<Socket>(timer_fd_));
   timer_conn_->SetEvents(POLL_READ | POLL_ET);
+  //  bind eg:print(int a, int b), auto boundFunc = std::bind(print, std::placeholders::_1, 42);
+  //  boundFunc 是一个新的可调用对象，它接受一个参数作为 print 函数的第一个参数，而第二个参数则是在绑定时已经指定为 42
   timer_conn_->SetCallback(std::bind(&Timer::HandleRead, this));
 }
 

@@ -3,6 +3,7 @@
 #include <algorithm>
 
 namespace Next::Http {
+  
 Request::Request(Method method, std::string resource_url, Version version,
                  const std::vector<Header> &heads) noexcept
     : method_(method), resource_url_(std::move(resource_url)),

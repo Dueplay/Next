@@ -40,6 +40,7 @@ void Poller::AddConnection(Connection *conn) {
 
 auto Poller::Poll(int timeout) -> std::vector<Connection *> {
     std::vector<Connection *> events_happen;
+    // timeout 参数传 -1 意味着无限期等待，直到至少一个监视的文件描述符上发生了一个事件
     int ready = epoll_wait(epoll_fd_, epoll_events_, epoll_size_, timeout);
     if (ready == -1) {
         perror("Poller: Poll() error");
@@ -47,7 +48,7 @@ auto Poller::Poll(int timeout) -> std::vector<Connection *> {
     }
     for (int i = 0; i < ready; i++) {
         Connection * ready_conn = reinterpret_cast<Connection *>(epoll_events_[i].data.ptr);
-        ready_conn->SetEvents(epoll_events_[i].events);
+        ready_conn->SetRevents(epoll_events_[i].events);
         events_happen.emplace_back(ready_conn);
     }
     return events_happen;

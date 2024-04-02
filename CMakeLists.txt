@@ -197,7 +197,7 @@ ADD_EXECUTABLE(buffer_test ${NEXT_SERVER_TEST_DIR}/core/buffer_test.cpp)
 TARGET_LINK_LIBRARIES(buffer_test PRIVATE Catch2::Catch2WithMain next_core)
 
 ADD_EXECUTABLE(cache_test ${NEXT_SERVER_TEST_DIR}/core/cache_test.cpp)
-TARGET_LINK_LIBRARIES(cache_test PRIVATE Catch2::Catch2WithMain next_core)
+TARGET_LINK_LIBRARIES(cache_test PRIVATE Catch2::Catch2WithMain next_core next_http)
 
 ADD_EXECUTABLE(timer_test ${NEXT_SERVER_TEST_DIR}/core/timer_test.cpp)
 TARGET_LINK_LIBRARIES(timer_test PRIVATE Catch2::Catch2WithMain next_core)

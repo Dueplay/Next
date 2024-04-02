@@ -33,8 +33,7 @@ void PrecessHttpRequest(const std::string &serving_dir,
       no_more_parse = true;
     } else {
       std::string resource_full_path = serving_dir + request.GetResourceUrl();
-      std::cout << "recv a http request, request path: " << resource_full_path
-                << std::endl;
+      //std::cout << "recv a http request, request path: " << resource_full_path << std::endl;
       if (IsCgiRequest(resource_full_path)) {
         // dynamic cgi request
         Cgier cgier = Cgier::ParseCgier(resource_full_path);

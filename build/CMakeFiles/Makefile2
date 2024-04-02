@@ -492,6 +492,7 @@ CMakeFiles/buffer_test.dir/clean:
 
 # All Build rule for target.
 CMakeFiles/cache_test.dir/all: CMakeFiles/next_core.dir/all
+CMakeFiles/cache_test.dir/all: CMakeFiles/next_http.dir/all
 CMakeFiles/cache_test.dir/all: CMakeFiles/next_log.dir/all
 CMakeFiles/cache_test.dir/all: _deps/catch2-build/src/CMakeFiles/Catch2.dir/all
 CMakeFiles/cache_test.dir/all: _deps/catch2-build/src/CMakeFiles/Catch2WithMain.dir/all
@@ -502,7 +503,7 @@ CMakeFiles/cache_test.dir/all: _deps/catch2-build/src/CMakeFiles/Catch2WithMain.
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cache_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gxj/Next/build/CMakeFiles 70
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gxj/Next/build/CMakeFiles 74
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cache_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/gxj/Next/build/CMakeFiles 0
 .PHONY : CMakeFiles/cache_test.dir/rule

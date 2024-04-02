@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
-
+#include <iostream>
 namespace Next::Http {
 
 Method ToMethod(const std::string &str) {
